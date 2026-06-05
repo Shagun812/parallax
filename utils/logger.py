@@ -1,0 +1,1 @@
+"""Logger- configures structured logging for the application"""

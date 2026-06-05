@@ -1,0 +1,25 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+# Parallax specific
+artifacts/runs/
+.env
+models/
+
+# VSCode
+.vscode/
+
+# UV
+.python-version
+EOFparallax.egg-info/
+parallax.egg-info/
+
+#parallax runtime file
+.parallax

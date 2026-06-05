@@ -1,0 +1,41 @@
+project:
+  name: parallax
+  artifacts_dir: "./artifacts/runs"
+
+models:
+  gpt2:
+    path: "gpt2"
+    type: "causal_lm"
+  gpt2-medium:
+    path: "gpt2-medium"
+    type: "causal_lm"
+
+
+inference:
+  default_model: "gpt2"
+  device: "auto"
+  max_new_tokens: 256
+  do_sample: true
+  temperature: 0.4
+  top_p: 0.9
+  repetition_penalty: 1.15
+
+benchmark:
+  runs_per_model: 1
+  warmup_runs: 1
+  collect_latency: true
+  collect_memory: true
+  collect_throughput: true
+  collect_tokens_per_sec: true
+
+quality:
+  enabled: false
+  method: "semantic_similarity"
+  embedding_model: "all-Mini-L6-v2"
+  collect_coherence_score: true
+
+logging:
+  enabled: true
+  level: "INFO"
+
+
