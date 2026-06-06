@@ -9,7 +9,7 @@ wheels/
 # Virtual environments
 .venv
 # Parallax specific
-artifacts/runs/
+results/runs/
 .env
 models/
 

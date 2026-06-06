@@ -1,6 +1,6 @@
 project:
   name: parallax
-  artifacts_dir: "./artifacts/runs"
+  artifacts_dir: "./results/runs"
 
 models:
   gpt2:
