@@ -64,7 +64,7 @@ def switch_cmd(model_name:str):
         return
     
     switch_model(model_name)
-    typer.echo(f"{model_name} switched!")
+    console.print(Panel(f"{model_name} switched!"))
 
 
 @app.command("generate")

@@ -20,8 +20,7 @@ def switch_model(model_name: str) -> str:
             f"{model_name} not found!\n"
             f"Available models: {available}"
             )
-    # Verify the model can be loaded
-    load_model(model_name, config)
+    
     set_active_model(model_name)
         
     return model_name
