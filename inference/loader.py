@@ -3,7 +3,7 @@
 from transformers import AutoModelForCausalLM, AutoTokenizer
 import torch 
 
-from config.loader import AppConfig 
+from utils.loader import AppConfig 
 
 
 # Cache of already loaded models

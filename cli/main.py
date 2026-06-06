@@ -2,7 +2,7 @@
 CLI entrypoint for all user facing commands
 """
 import typer
-from config.loader import load_config
+from utils.loader import load_config
 from inference.generator import generate
 from services.serving import get_loaded_model, get_current_model, switch_model
 

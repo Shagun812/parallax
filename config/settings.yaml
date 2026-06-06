@@ -14,7 +14,7 @@ models:
 inference:
   default_model: "gpt2"
   device: "auto"
-  max_new_tokens: 256
+  max_new_tokens: 126
   do_sample: true
   temperature: 0.4
   top_p: 0.9

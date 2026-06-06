@@ -1,6 +1,6 @@
 """Persist runtime state"""
 from pathlib import Path
-from config.loader import load_config
+from utils.loader import load_config
 import json
 
 

@@ -1,7 +1,7 @@
 """Serving service- manages active model selection and switching"""
 
 from services.state import get_active_model, set_active_model
-from config.loader import load_config
+from utils.loader import load_config
 from inference.loader import load_model
 
 
