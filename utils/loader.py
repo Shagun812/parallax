@@ -35,7 +35,6 @@ class BenchmarkConfig(BaseModel):
     collect_latency: bool
     collect_memory: bool
     collect_throughput: bool
-    collect_tokens_per_sec: bool
 
 class QualityConfig(BaseModel):
     enabled: bool

@@ -1,6 +1,6 @@
 project:
   name: parallax
-  artifacts_dir: "./results/runs"
+  artifacts_dir: "./artifacts"
 
 models:
   gpt2:
@@ -27,7 +27,6 @@ benchmark:
   collect_latency: true
   collect_memory: true
   collect_throughput: true
-  collect_tokens_per_sec: true
 
 quality:
   enabled: false

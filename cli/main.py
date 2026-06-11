@@ -5,6 +5,10 @@ import typer
 from utils.loader import load_config
 from inference.generator import generate
 from services.serving import get_loaded_model, get_current_model, switch_model
+from benchmark.runner import run_benchmark
+from tracking.writer import save_benchmark
+
+
 
 from rich.console import Console
 from rich.panel import Panel
@@ -92,3 +96,45 @@ def generate_cmd(prompt:str= typer.Option(..., "--prompt", help="Prompt to gener
     metrics_table.add_row("Tokens per sec", str(result["tokens_per_sec"]),)
     console.print(metrics_table)
 
+
+
+@benchmark_app.command("run")
+def benchmark_run():
+
+    console.print("[bold green] Running benchmark....[/bold green]")
+    res = run_benchmark()
+
+    metrics= res["metrics"]
+    model_name= res["model"]
+
+    artifact_path = save_benchmark(res)
+
+    console.print(Panel(model_name, title="Benchmark Model"))
+
+    metrics_table= Table(title="Benchmark Results")
+    metrics_table.add_column("Metric")
+    metrics_table.add_column("Value")
+
+    rows=[
+        ("Total Prompts", str(metrics["total_prompts"])),
+        ("Total Runs", str(metrics["total_runs"])),
+        ("Mean Latency (ms)", str(metrics["mean_latency_ms"])),
+        ("P50 Latency (ms)", str(metrics["p50_latency_ms"])),
+        ("P95 Latency (ms)", str(metrics["p95_latency_ms"])),
+        ("P99 Latency (ms)", str(metrics["p99_latency_ms"])),
+        ("Max Latency (ms)", str(metrics["max_latency_ms"])),
+        ("Min Latency (ms)", str(metrics["min_latency_ms"])),
+        ("Mean Throughput", str(metrics["mean_tokens_per_sec"])),
+        ("P50 Throughput", str(metrics["p50_tokens_per_sec"])),
+        ("P95 Throughput", str(metrics["p95_tokens_per_sec"])),
+        ("P99 Throughput", str(metrics["p99_tokens_per_sec"])), 
+        ("Avg Input Tokens", str(metrics["avg_input_tokens"])),
+        ("Avg Output Tokens", str(metrics["avg_output_tokens"])),
+        ("Total Output Tokens", str(metrics["total_output_tokens"]))       
+    ]
+
+    for metric, value in rows:
+        metrics_table.add_row(metric, value)
+    console.print(metrics_table)
+
+    console.print(f"Benchmark saved: {artifact_path}")

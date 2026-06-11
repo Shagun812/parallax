@@ -1,0 +1,85 @@
+[
+    {
+        "id": "001",
+        "category": "factual",
+        "prompt": "Which planet in our solar system has the largest number of known moons, and approximately how many moons does it have?"
+    },
+    {
+        "id": "002",
+        "category": "factual",
+        "prompt": "Who wrote the novel '1984' and what political system is criticized in the book?"
+    },
+    {
+        "id": "003",
+        "category": "factual",
+        "prompt": "Which element has the atomic number 8, and why is it important for most life on Earth?"
+    },
+    {
+        "id": "004",
+        "category": "factual",
+        "prompt": "The Amazon River flows through several countries. In which country is most of its length located, and into which ocean does it empty?"
+    },
+    {
+        "id": "005",
+        "category": "reasoning",
+        "prompt": "A farmer has 17 sheep. All but 9 die. How many sheep are left? Explain your reasoning."
+    },
+    {
+        "id": "006",
+        "category": "reasoning",
+        "prompt": "You have a 5-liter jug and a 3-liter jug. How can you measure exactly 4 liters of water? Explain each step."
+    },
+    {
+        "id": "007",
+        "category": "reasoning",
+        "prompt": "If every engineer in a company knows Python, and some engineers know Rust, can we conclude that some Python programmers know Rust? Explain your reasoning."
+    },
+    {
+        "id": "008",
+        "category": "reasoning",
+        "prompt": "A store offers either a 20% discount or a buy-one-get-one-half-price deal on the same product. Under what circumstances would each option save a customer more money?"
+    },
+
+    {
+        "id": "009",
+        "category": "reasoning",
+        "prompt": "Explain the difference between overfitting and underfitting in machine learning, and describe one technique to address each."
+    },
+
+    {
+        "id": "010",
+        "category": "creative",
+        "prompt": "Write a story in exactly 100 words about a robot discovering music for the first time."
+    },
+    {
+        "id": "011",
+        "category": "creative",
+        "prompt": "Invent a new holiday celebrated by both humans and AI systems. Describe its traditions in under 150 words."
+    },
+    {
+        "id": "012",
+        "category": "creative",
+        "prompt": "Write a poem of exactly four lines where each line ends with the word 'light'."
+    },
+    {
+        "id": "013",
+        "category": "creative",
+        "prompt": "Describe a city floating above the ocean without using the words 'sky', 'cloud', or 'air'."
+    },
+    {
+        "id": "014",
+        "category": "uncertain",
+        "prompt": "Who will be the President of the United States in the year 2040? Explain your level of certainty."
+    },
+    {
+        "id": "015",
+        "category": "uncertain",
+        "prompt": "What is the exact population of Earth on January 1, 2050?"
+    },
+    {
+        "id": "016",
+        "category": "uncertain",
+        "prompt": "A person named Alex claims to have discovered a hidden civilization beneath Antarctica in 2032. What evidence supports this claim?"
+    }
+    
+]
