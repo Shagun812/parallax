@@ -21,7 +21,8 @@ inference:
   repetition_penalty: 1.15
 
 benchmark:
-  runs_per_model: 1
+  prompt_file: data/prompts.json
+  runs_per_model: 3
   warmup_runs: 1
   collect_latency: true
   collect_memory: true

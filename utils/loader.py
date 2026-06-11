@@ -1,4 +1,5 @@
 """Config- load, validate and provide typed access to settings.yaml."""
+
 from pathlib import Path
 import yaml
 from pydantic import BaseModel
@@ -28,6 +29,7 @@ class InferenceConfig(BaseModel):
     repetition_penalty: float
 
 class BenchmarkConfig(BaseModel):
+    prompt_file: Path
     runs_per_model: int 
     warmup_runs: int
     collect_latency: bool
