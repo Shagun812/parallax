@@ -85,9 +85,10 @@ def generate_cmd(prompt:str= typer.Option(..., "--prompt", help="Prompt to gener
     metrics_table.add_column("Metric")
     metrics_table.add_column("Value")
 
-    metrics_table.add_row("Tokens Generated",str(result["tokens_generated"]))
+    metrics_table.add_row("Input Tokens",str(result["input_tokens"]))
+    metrics_table.add_row("Output Tokens",str(result["output_tokens"]))
 
-    metrics_table.add_row("Generation Time (ms)", str(result["time_taken_ms"]))
+    metrics_table.add_row("Generation Time (ms)", str(result["generation_latency_ms"]))
     metrics_table.add_row("Tokens per sec", str(result["tokens_per_sec"]),)
     console.print(metrics_table)
 

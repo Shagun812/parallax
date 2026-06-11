@@ -18,6 +18,9 @@ def generate(loaded_model: dict, prompt: str, config) -> dict:
         for key, value in inputs.items()
     }
 
+    if device == "cuda":
+        torch.cuda.synchronize()
+        
     start_time= time.perf_counter()
 
     with torch.no_grad():
@@ -43,9 +46,10 @@ def generate(loaded_model: dict, prompt: str, config) -> dict:
 
     return {
         "response": response,
-        "tokens_generated": generated_ids.shape[0],
-        "time_taken_ms": round(time_taken_ms,2),
-        "tokens_per_sec": round(tokens_per_sec, 2)
+        "input_tokens": input_length,
+        "output_tokens": generated_ids.shape[0],
+        "generation_latency_ms": round(time_taken_ms,2),
+        "tokens_per_sec": round(tokens_per_sec, 2),
     }
 
 
