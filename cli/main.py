@@ -124,10 +124,7 @@ def benchmark_run():
         ("P99 Latency (ms)", str(metrics["p99_latency_ms"])),
         ("Max Latency (ms)", str(metrics["max_latency_ms"])),
         ("Min Latency (ms)", str(metrics["min_latency_ms"])),
-        ("Mean Throughput", str(metrics["mean_tokens_per_sec"])),
-        ("P50 Throughput", str(metrics["p50_tokens_per_sec"])),
-        ("P95 Throughput", str(metrics["p95_tokens_per_sec"])),
-        ("P99 Throughput", str(metrics["p99_tokens_per_sec"])), 
+        ("Mean Throughput", str(metrics["mean_tokens_per_sec"])), 
         ("Avg Input Tokens", str(metrics["avg_input_tokens"])),
         ("Avg Output Tokens", str(metrics["avg_output_tokens"])),
         ("Total Output Tokens", str(metrics["total_output_tokens"]))       
