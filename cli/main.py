@@ -8,6 +8,8 @@ from services.serving import get_loaded_model, get_current_model, switch_model
 from benchmark.runner import run_benchmark
 from tracking.writer import save_benchmark
 from tracking.report import list_reports, load_report
+from benchmark.comparator import comp_benchmarks
+from pathlib import Path
 
 
 from rich.console import Console
@@ -141,6 +143,7 @@ def benchmark_run():
 def experiment_list():
 
     exp_list = list_reports()
+
     metrics_table = Table(title="Benchmarks List")
     metrics_table.add_column("Report")
     metrics_table.add_column("Model")
@@ -162,3 +165,92 @@ def experiment_list():
             )
 
     console.print(metrics_table)
+
+
+@experiments_app.command("show")
+def exp_show(report_name:str):
+
+    dir = Path(config.project.artifacts_dir)/"benchmarks"
+    report_dir = dir/report_name
+
+    if not report_dir.exists():
+        raise FileNotFoundError(f"Report {report_dir} not exists")
+
+    report_data = load_report(report_dir)
+    metrics = report_data["metrics"]
+
+    table = Table(title="Benchmarks Report")
+
+    console.print(Panel(report_data['model'], title= "Benchmark Model"))
+    table.add_column("Metric")
+    table.add_column("Value")
+
+
+    rows=[
+        ("Total Prompts", str(metrics["total_prompts"])),
+        ("Total Runs", str(metrics["total_runs"])),
+        ("Mean Latency (ms)", str(metrics["mean_latency_ms"])),
+        ("P50 Latency (ms)", str(metrics["p50_latency_ms"])),
+        ("P95 Latency (ms)", str(metrics["p95_latency_ms"])),
+        ("P99 Latency (ms)", str(metrics["p99_latency_ms"])),
+        ("Max Latency (ms)", str(metrics["max_latency_ms"])),
+        ("Min Latency (ms)", str(metrics["min_latency_ms"])),
+        ("Mean Throughput", str(metrics["mean_tokens_per_sec"])), 
+        ("Avg Input Tokens", str(metrics["avg_input_tokens"])),
+        ("Avg Output Tokens", str(metrics["avg_output_tokens"])),
+        ("Total Output Tokens", str(metrics["total_output_tokens"]))       
+    ]
+
+    for metric, value in rows:
+        table.add_row(metric, value)
+    console.print(table)
+
+
+@experiments_app.command("compare")
+def compare_benchmarks(report1:str, report2: str): 
+
+    reports_dir = Path(config.project.artifacts_dir)/"benchmarks"
+    report1_path = reports_dir/report1
+    report2_path = reports_dir/report2
+
+    report_a = load_report(report1_path)
+    report_b = load_report(report2_path)
+    
+    comp = comp_benchmarks(report_a, report_b)
+
+    model1 = comp["model_a"]
+    model2 = comp["model_b"]
+
+    met = comp["metrics"]
+
+
+    DISPLAY_NAMES = {
+    "mean_latency_ms": "Mean Latency (ms)",
+    "p50_latency_ms": "P50 Latency (ms)",
+    "p95_latency_ms": "P95 Latency (ms)",
+    "p99_latency_ms": "P99 Latency (ms)",
+    "mean_tokens_per_sec": "Mean Throughput"
+
+}
+
+    table = Table(title="Comparison Report")
+    table.add_column("Metric")
+    table.add_column(model1)
+    table.add_column(model2)
+    table.add_column("Difference")
+    table.add_column("Better")
+
+    for metric_name, metric_data in met.items():
+        display_name = DISPLAY_NAMES.get(metric_name, metric_name)
+        table.add_row(
+            display_name,
+            str(metric_data["model_a"]),
+            str(metric_data["model_b"]),
+            str(metric_data["difference"]),
+            str(metric_data["better"])
+        )
+
+    console.print(table)
+
+    
+ 
