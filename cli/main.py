@@ -7,7 +7,7 @@ from inference.generator import generate
 from services.serving import get_loaded_model, get_current_model, switch_model
 from benchmark.runner import run_benchmark
 from tracking.writer import save_benchmark
-
+from tracking.report import list_reports, load_report
 
 
 from rich.console import Console
@@ -135,3 +135,30 @@ def benchmark_run():
     console.print(metrics_table)
 
     console.print(f"Benchmark saved: {artifact_path}")
+
+
+@experiments_app.command("list")
+def experiment_list():
+
+    exp_list = list_reports()
+    metrics_table = Table(title="Benchmarks List")
+    metrics_table.add_column("Report")
+    metrics_table.add_column("Model")
+    metrics_table.add_column("Prompts")
+    metrics_table.add_column("Runs")
+
+    if not exp_list:
+        console.print("No benchmark reports found")
+        return
+
+    for path in exp_list:
+        report = load_report(path)
+        metrics = report["metrics"]
+        metrics_table.add_row(
+            path.name, 
+            report["model"],
+            str(metrics["total_prompts"]),
+            str(metrics["total_runs"])
+            )
+
+    console.print(metrics_table)
