@@ -32,4 +32,6 @@ def get_loaded_model() -> dict:
     return load_model(model_name, config)
 
 
+def models_list()-> list[str]:
 
+    return list(config.models.keys())

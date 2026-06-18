@@ -9,7 +9,7 @@ def generate_text_serving(prompt:str):
 
     cfg = load_config()
 
-    if not prompt:
+    if not prompt or not prompt.strip():
         raise ValueError("The prompt not found")
     
     loaded_model = get_loaded_model()

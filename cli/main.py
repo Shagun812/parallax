@@ -2,8 +2,7 @@
 CLI entrypoint for all user facing commands
 """
 import typer
-from utils.loader import load_config
-from services.serving import get_current_model, switch_model
+from services.serving import get_current_model, switch_model, models_list
 from services.benchmark import run_benchmark_service
 from services.export import load_report_serving, comp_benchmarks_serving, list_experiments_serving
 from services.inference import generate_text_serving
@@ -30,23 +29,20 @@ app.add_typer(models_app, name="models")
 app.add_typer(benchmark_app,name="benchmark")
 app.add_typer(experiments_app,name="experiments")
 
-config = load_config()
-default_model= config.inference.default_model
-
 
 
 @models_app.command("list")
-def models_list():
-    
-    text=" "
-    
-    for model_name in config.models:
-        if model_name== default_model:
-            text+= (f"-{model_name}(default)\n")
-        else:
-            text+= (f" -{model_name}")
-    console.print(Panel(text, title="Available Models"))
+def list_model():
 
+    table = Table(title="Available Models")
+    table.add_column("Model")
+    
+    models = models_list()
+
+    for model in models:
+        table.add_row(model)
+    console.print(table)
+        
 
 @models_app.command("current")
 def current_model():
