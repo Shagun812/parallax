@@ -2,9 +2,11 @@
 
 from transformers import AutoModelForCausalLM, AutoTokenizer
 import torch 
-
 from utils.loader import AppConfig 
+from utils.logger import setup_logger
 
+import logging
+logger = logging.getLogger(f"parallax.{__name__}")
 
 # Cache of already loaded models
 loaded_models= {}
@@ -26,12 +28,16 @@ def validate_model(model_name: str, config: AppConfig) -> None:
         )
     
 def load_model(model_name: str, config: AppConfig) -> dict:
+
     if model_name in loaded_models:
+        logger.info(f"Using cached model: {model_name}")
         return loaded_models[model_name]
     
     validate_model(model_name, config)
 
     model_config= config.models[model_name]
+
+    logger.info(f"Loading model: {model_name}")
 
     tokenizer= AutoTokenizer.from_pretrained(model_config.path)
     tokenizer.pad_token = tokenizer.eos_token
@@ -48,5 +54,7 @@ def load_model(model_name: str, config: AppConfig) -> dict:
     }
 
     loaded_models[model_name]= loaded_model
+
+    logger.info(f"Model loaded: {model_name} on {device}")
 
     return loaded_model
