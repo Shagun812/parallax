@@ -38,6 +38,11 @@ exclude = ["tests*", "data*", "artifacts*", "docs*"]
 requires = ["setuptools>=68.0"]
 build-backend="setuptools.build_meta"
 
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+]
+
 
 [project.scripts]
 parallax = "cli.main:app"

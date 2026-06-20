@@ -34,7 +34,14 @@ def comp_benchmarks_serving(report1:str, report2:str):
     report2_path = dir/report2
 
     report_a = load_report(report1_path)
+
     report_b = load_report(report2_path)
+
+    if report_a is None:
+        raise FileNotFoundError(f"Report not found: {report1}")
+    
+    if report_b is None:
+        raise FileNotFoundError(f"Report not found: {report2}")
 
     comp = comp_benchmarks(report_a, report_b)
 

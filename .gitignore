@@ -23,3 +23,6 @@ parallax.egg-info/
 
 #parallax runtime file
 .parallax
+
+#pytest cache
+.pytest_cache
