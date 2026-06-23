@@ -13,26 +13,28 @@ from rich.table import Table
 
 
 console = Console()
-metrics_table= Table()
-
 
 
 # Main app
-app = typer.Typer()
+app = typer.Typer(help="Local LLM benchmarking and serving platform")
 
 # Sub-apps
-models_app = typer.Typer()
-benchmark_app = typer.Typer()
-experiments_app = typer.Typer()
+models_app = typer.Typer(help="Manage available models")
+benchmark_app = typer.Typer(help="Run benchmarks and measure performance")
+experiments_app = typer.Typer(help="View and compare experiment results")
 
 app.add_typer(models_app, name="models")
-app.add_typer(benchmark_app,name="benchmark")
-app.add_typer(experiments_app,name="experiments")
 
+app.add_typer(benchmark_app,name="benchmark")
+app.add_typer(benchmark_app, name="bench")
+
+app.add_typer(experiments_app,name="experiments")
+app.add_typer(experiments_app, name="exp")
 
 
 @models_app.command("list")
 def list_model():
+    """List all available models."""
 
     table = Table(title="Available Models")
     table.add_column("Model")
@@ -46,6 +48,7 @@ def list_model():
 
 @models_app.command("current")
 def current_model():
+    """Show the currently active model."""
 
     model_name= get_current_model()
 
@@ -53,7 +56,8 @@ def current_model():
 
 
 @models_app.command("switch")
-def switch_cmd(model_name:str):
+def switch_cmd(model_name:str = typer.Option(..., "--model", help="Model to switch to")):
+    """Switch the active model."""
 
     current= get_current_model()
 
@@ -67,6 +71,7 @@ def switch_cmd(model_name:str):
 
 @app.command("generate")
 def generate_cmd(prompt:str= typer.Option(..., "--prompt", help="Prompt to generate from"))-> None:
+    """Run inference with the active model."""
 
     if not prompt.strip():
         raise typer.BadParameter("Prompt cannot be empty!")
@@ -92,9 +97,11 @@ def generate_cmd(prompt:str= typer.Option(..., "--prompt", help="Prompt to gener
 
 @benchmark_app.command("run")
 def benchmark_run():
+    """Run benchmark for the active model."""
 
     console.print("[bold green] Running benchmark....[/bold green]")
-    service_res = run_benchmark_service()
+    with console.status("Running benchmark..."):
+        service_res = run_benchmark_service()
 
     artifact_path = service_res["artifact_path"]
 
@@ -134,6 +141,7 @@ def benchmark_run():
 
 @experiments_app.command("list")
 def experiment_list():
+    """List all saved benchmark reports."""
 
     exp_list = list_experiments_serving()
 
@@ -161,7 +169,8 @@ def experiment_list():
 
 
 @experiments_app.command("show")
-def exp_show(report_name:str):
+def exp_show(report_name:str = typer.Option(..., "--file", help="Report filename")):
+    """Show details of a specific benchmark report."""
 
     report_data = load_report_serving(report_name)
     
@@ -196,7 +205,10 @@ def exp_show(report_name:str):
 
 
 @experiments_app.command("compare")
-def compare_benchmarks(report1:str, report2: str): 
+def compare_benchmarks(
+    report1:str = typer.Option(..., "--file-a", help="First benchmark report" ),
+    report2: str= typer.Option(..., "--file-b", help="Second benchmark report")): 
+    """Compare two benchmark reports side by side."""
     
     comp = comp_benchmarks_serving(report1, report2)
 
