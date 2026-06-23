@@ -3,16 +3,16 @@ project:
   artifacts_dir: "./artifacts"
 
 models:
-  gpt2:
-    path: "gpt2"
+  qwen-small:
+    path: "Qwen/Qwen2.5-0.5B-Instruct"
     type: "causal_lm"
-  gpt2-medium:
-    path: "gpt2-medium"
+  smollm2:
+    path: "HuggingFaceTB/SmolLM2-360M-Instruct"
     type: "causal_lm"
 
 
 inference:
-  default_model: "gpt2"
+  default_model: "qwen-small"
   device: "auto"
   max_new_tokens: 126
   do_sample: true

@@ -5,15 +5,16 @@ from inference.generator import generate
 from utils.loader import load_config
 
 cfg = load_config()
+TEST_MODEL = cfg.inference.default_model
 
 @pytest.fixture(scope="session")
 def loaded_model():
-    return load_model("gpt2", cfg)
+    return load_model(TEST_MODEL, cfg)
 
 
 # Validate Valid Model
 def test_validate_valid_model():
-     validate_model("gpt2",cfg)
+     validate_model(TEST_MODEL,cfg)
 
 # Validate invalid model
 def test_validate_invalid_model():
@@ -32,8 +33,8 @@ def test_load_returns_components(loaded_model):
 
 # Testing caching behaviour
 def test_load_model_caching():
-    model1 = load_model("gpt2", cfg)
-    model2 = load_model("gpt2", cfg)
+    model1 = load_model(TEST_MODEL, cfg)
+    model2 = load_model(TEST_MODEL, cfg)
     assert model1 is model2  # Same object in memory, not just equal
 
 
