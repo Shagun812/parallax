@@ -28,14 +28,11 @@
 
 ## Why Parallax
 
-Most LLM projects are notebooks. A notebook runs a model, it doesn't tell you much about how a real system is structured, how services talk to each other, how dependencies flow, how you separate transport from business logic from infrastructure, or how you make results reproducible across runs.
+Most LLM projects begin and end in notebooks. While notebooks are useful for experimentation, they reveal little about how AI systems are structured beyond the model itself: how requests flow through a system, how services are organized, how experiments are tracked, and how results remain reproducible over time.
 
-Parallax was built to answer those questions concretely, by implementing them rather than reading about them. The goal was to understand how production AI systems are actually organized — what a service layer does, why CLI and HTTP endpoints shouldn't duplicate logic, how benchmarking infrastructure differs from just timing a cell, and what experiment tracking looks like when results need to be reproducible.
+Parallax was built to explore those engineering concerns in practice. Instead of focusing on model training, it focuses on the infrastructure surrounding AI systems: model serving, benchmarking, experiment tracking, configuration management, and layered system design.
 
-The result is a platform that is deliberately over-engineered for local use — not because local use requires it, but because the engineering is the point.
-
-
-### CLI
+The result is a platform that is deliberately over-engineered for local use, not because local use requires it, but because engineering is the point. The goal is to understand and implement the architectural patterns commonly found in production-oriented AI systems.
 
 ![CLI](docs/CLI.png)
 
@@ -45,7 +42,9 @@ The result is a platform that is deliberately over-engineered for local use — 
 
 Parallax is a modular local LLM platform built around a production-inspired service architecture.
 
-It exposes two interfaces over a shared service layer. The CLI provides full platform access — model management, text generation, benchmark execution, and experiment tracking. 
+It exposes two interfaces over a shared service layer.
+
+ The CLI provides full platform access: model management, text generation, benchmark execution, and experiment tracking. 
 
 The FastAPI layer exposes a focused subset: model management and inference through a typed HTTP interface with Swagger documentation.
 
@@ -82,7 +81,7 @@ Benchmarking and experiment tracking are CLI-driven workflows. Results are persi
 **Observability**
 - Structured logging to `artifacts/logs/`
 - Reproducible benchmark artifacts with full run metadata
-- Configuration-driven — all behavior controlled from a single YAML file
+- Configuration-driven; all behavior controlled from a single YAML file
 
 ---
 
@@ -92,10 +91,10 @@ Parallax follows a layered architecture that separates interfaces, business logi
 
 Key design principles:
 
-- Shared service layer across CLI and FastAPI — business logic is implemented once
-- Separated concerns — inference, benchmarking, and tracking are independent modules
-- Configuration-driven model management — models and behavior defined in `config/settings.yaml`
-- Structured logging and artifact persistence — all runs are traceable and reproducible
+- Shared service layer across CLI and FastAPI, business logic is implemented once
+- Separated concerns - inference, benchmarking, and tracking are independent modules
+- Configuration-driven model management models and behavior defined in `config/settings.yaml`
+- Structured logging and artifact persistence in all runs are traceable and reproducible
 
 ![Architecture](docs/architecture.png)
 
@@ -105,7 +104,7 @@ For a detailed breakdown of each layer and component, see [`docs/architecture.md
 
 ## Installation
 
-**Requirements:** Python 3.9+
+**Requirements:** Python 3.10+
 
 ```bash
 git clone https://github.com/Shagun812/parallax.git
@@ -181,7 +180,7 @@ logging:
 |---|---|---|
 | `project` | `artifacts_dir` | Root directory for all runtime artifacts |
 | `models` | `path` | HuggingFace model identifier |
-| `models` | `type` | Model class — currently `causal_lm` |
+| `models` | `type` | Model class - currently `causal_lm` |
 | `inference` | `default_model` | Model loaded on startup |
 | `inference` | `device` | `auto`, `cuda`, or `cpu` |
 | `inference` | `max_new_tokens` | Maximum decode tokens per request |
@@ -192,7 +191,7 @@ logging:
 | `benchmark` | `runs_per_model` | Benchmark iterations per run |
 | `benchmark` | `warmup_runs` | Warmup iterations excluded from metrics |
 | `quality` | `enabled` | Enable semantic quality scoring (v2) |
-| `logging` | `level` | Log verbosity — `INFO`, `DEBUG`, `WARNING` |
+| `logging` | `level` | Log verbosity : `INFO`, `DEBUG`, `WARNING` |
 
 ---
 
@@ -210,13 +209,13 @@ parallax models list
 parallax models current
 
 # Switch active model
-parallax models switch --model smollm2
+parallax models switch -m smollm2
 ```
 
 **Text generation**
 
 ```bash
-parallax generate --prompt "Explain attention mechanisms"
+parallax generate -p "Explain attention mechanisms"
 ```
 
 Output includes: generated text, input tokens, output tokens, generation latency (ms), tokens/sec.
@@ -233,15 +232,31 @@ Runs a structured benchmark workload against the active model using prompts from
 
 ```bash
 # List all saved benchmark reports
-parallax experiments list
+parallax exp list
 
 # Inspect a specific report
-parallax experiments show --file <filename>
+parallax exp show -f <filename>
 
 # Compare two runs side by side
-parallax experiments compare --file-a <file1> --file-b <file2>
+parallax exp compare -a <file1> -b <file2>
 ```
+### Command Aliases
 
+| Full Command | Alias  |
+|-------------|---------|
+| `benchmark` | `bench` |
+| `experiments` | `exp` |
+
+
+### Quick Flags Reference
+
+| Option | Short | Description |
+|----------|--------|-------------|
+| `--model` | `-m` | Model name to switch  |
+| `--prompt` | `-p` | Input prompt for text generation |
+| `--file` | `-f` | Benchmark report filename |
+| `--file-a` | `-a` | First benchmark report for comparison |
+| `--file-b` | `-b` | Second benchmark report for comparison |
 ---
 
 ### REST API
@@ -377,11 +392,11 @@ Benchmark runs are executed via the CLI and persisted as structured JSON artifac
 
 - Model name and configuration
 - Prompt count and runs per prompt
-- Generation latency — mean, p50, p95, p99, min, max
+- Generation latency include mean, p50, p95, p99, min and max latency
 - Mean tokens per second
 - Average input and output token counts
 
-**What is measured:** Generation latency covers the full `model.generate()` decode loop — all forward passes, KV cache operations, and sampling. A CUDA synchronization point is placed after generation and before the timer stop to ensure GPU execution is fully complete before measurement is taken.
+**What is measured:** Generation latency covers the full `model.generate()` decode loop, all forward passes, KV cache operations, and sampling. A CUDA synchronization point is placed after generation and before the timer stop to ensure GPU execution is fully complete before measurement is taken.
 
 **What is not measured:** Time to first token (TTFT), tokenization time, and end-to-end request latency are not currently captured. These are planned for v2.
 
@@ -428,7 +443,7 @@ Parallax v1 is intentionally scoped to local single-user experimentation.
 - Single active model at a time
 - No async inference or request queuing
 - No distributed or multi-GPU execution
-- No dashboard or UI — CLI and HTTP only
+- No dashboard or UI - CLI and HTTP only
 - Benchmarking and experiment tracking available via CLI only
 - Artifact storage is local filesystem only
 - Quality scoring is implemented in configuration but disabled pending v2 evaluation pipeline
