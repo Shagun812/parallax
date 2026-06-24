@@ -16,7 +16,9 @@ def test_save_benchmark_empty_report():
 def test_save_benchmark_create_file():
     report = {
         "model": "gpt2",
-        "metrics": {"mean_latency_ms": 100}
+        "metrics": {"total_prompts": 5,
+                    "total_runs":3,
+                    "mean_latency_ms": 100}
     }
 
     path = save_benchmark(report)
@@ -27,7 +29,9 @@ def test_save_benchmark_persist_data():
 
     report = {
     "model": "gpt2",
-    "metrics": {"mean_latency_ms": 100}
+    "metrics": {"total_prompts": 5,
+                "total_runs":3,
+                "mean_latency_ms": 100}
     }
 
     path = save_benchmark(report)
@@ -42,7 +46,9 @@ def test_load_report():
 
     report = {
     "model": "gpt2",
-    "metrics": {"mean_latency_ms": 100}
+    "metrics": {"total_prompts": 5,
+                "total_runs":3,
+                "mean_latency_ms": 100}
     }
 
     path = save_benchmark(report)

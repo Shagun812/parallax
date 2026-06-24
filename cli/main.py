@@ -56,7 +56,7 @@ def current_model():
 
 
 @models_app.command("switch")
-def switch_cmd(model_name:str = typer.Option(..., "--model", help="Model to switch to")):
+def switch_cmd(model_name:str = typer.Option(...,"-m", "--model", help="Model to switch to")):
     """Switch the active model."""
 
     current= get_current_model()
@@ -70,7 +70,7 @@ def switch_cmd(model_name:str = typer.Option(..., "--model", help="Model to swit
 
 
 @app.command("generate")
-def generate_cmd(prompt:str= typer.Option(..., "--prompt", help="Prompt to generate from"))-> None:
+def generate_cmd(prompt:str= typer.Option(...,"-p","--prompt", help="Prompt to generate from"))-> None:
     """Run inference with the active model."""
 
     if not prompt.strip():
@@ -169,7 +169,7 @@ def experiment_list():
 
 
 @experiments_app.command("show")
-def exp_show(report_name:str = typer.Option(..., "--file", help="Report filename")):
+def exp_show(report_name:str = typer.Option(...,"-f", "--file", help="Report filename")):
     """Show details of a specific benchmark report."""
 
     report_data = load_report_serving(report_name)
@@ -206,8 +206,8 @@ def exp_show(report_name:str = typer.Option(..., "--file", help="Report filename
 
 @experiments_app.command("compare")
 def compare_benchmarks(
-    report1:str = typer.Option(..., "--file-a", help="First benchmark report" ),
-    report2: str= typer.Option(..., "--file-b", help="Second benchmark report")): 
+    report1:str = typer.Option(...,"-a", "--file-a", help="First benchmark report" ),
+    report2: str= typer.Option(...,"-b","--file-b", help="Second benchmark report")): 
     """Compare two benchmark reports side by side."""
     
     comp = comp_benchmarks_serving(report1, report2)
