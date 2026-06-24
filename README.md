@@ -34,13 +34,11 @@ Parallax was built to answer those questions concretely, by implementing them ra
 
 The result is a platform that is deliberately over-engineered for local use — not because local use requires it, but because the engineering is the point.
 
----
-
-## Screenshots
 
 ### CLI
 
-![CLI](docs/CLI.png.png)
+![CLI](docs/CLI.png)
+
 ---
 
 ## Overview
@@ -99,7 +97,7 @@ Key design principles:
 - Configuration-driven model management — models and behavior defined in `config/settings.yaml`
 - Structured logging and artifact persistence — all runs are traceable and reproducible
 
-![Architecture](docs/images/architecture.png)
+![Architecture](docs/architecture.png)
 
 For a detailed breakdown of each layer and component, see [`docs/architecture.md`](docs/architecture.md).
 
@@ -301,42 +299,75 @@ Benchmark artifacts contain full run metadata: model name, timestamp, latency di
 
 ## Project Structure
 
-```
+```text
 parallax/
+
 ├── api/
-│   ├── app.py
-│   └── schemas.py
+│   ├── app.py                     # FastAPI application and route definitions
+│   └── schemas.py                 # Pydantic request/response schemas
+│
 ├── benchmark/
-│   ├── comparator.py
-│   ├── metrics.py
-│   └── runner.py
+│   ├── comparator.py              # Benchmark comparison logic
+│   ├── metrics.py                 # Latency and throughput calculations
+│   ├── quality.py                 # Quality evaluation module (future use)
+│   └── runner.py                  # Benchmark execution engine
+│
 ├── cli/
-│   └── main.py
+│   └── main.py                    # Typer CLI commands
+│
 ├── config/
-│   └── settings.yaml
-├── inference/
-│   ├── generator.py
-│   └── loader.py
-├── services/
-│   ├── benchmark.py
-│   ├── export.py
-│   ├── inference.py
-│   └── serving.py
-├── tracking/
-│   ├── report.py
-│   └── writer.py
-├── utils/
-│   ├── loader.py
-│   └── logger.py
-├── tests/
+│   └── settings.yaml              # Centralized project configuration
+│
 ├── data/
-│   └── prompts.json
-├── artifacts/          # Generated at runtime — gitignored
-└── docs/
-    ├── architecture.md
-    └── images/
-        └── architecture.png
+│   └── prompts.json               # Benchmark prompt dataset
+│
+├── docs/
+│   ├── architecture.md            # System architecture documentation
+│   ├── architecture.png           # Architecture diagram
+│   ├── benchmarks.md              # Benchmark methodology and results
+│   └── CLI.png                    # CLI screenshots and usage examples
+│
+├── inference/
+│   ├── generator.py               # Text generation pipeline
+│   └── loader.py                  # Model and tokenizer loading
+│
+├── services/
+│   ├── benchmark.py               # Benchmark workflow orchestration
+│   ├── export.py                  # Report and artifact management services
+│   ├── inference.py               # Inference workflow orchestration
+│   ├── serving.py                 # Serving and model management workflows
+│   └── state.py                   # Active model state management
+│
+├── tracking/
+│   ├── report.py                  # Report discovery and loading
+│   └── writer.py                  # Benchmark artifact persistence
+│
+├── tests/                         # Pytest test suite
+│
+├── utils/
+│   ├── loader.py                  # Shared configuration utilities
+│   └── logger.py                  # Logging configuration and helpers
+│
+├── artifacts/                     # Generated benchmark artifacts (gitignored)
+│
+├── .env.example                   # Environment variable reference
+├── pyproject.toml                 # Project metadata and dependencies
+└── README.md
 ```
+
+### Architectural Responsibilities
+
+* **api/** → HTTP interface for interacting with Parallax through FastAPI.
+* **cli/** → Command-line interface built with Typer.
+* **services/** → Business logic and workflow orchestration layer.
+* **inference/** → Model loading and text generation functionality.
+* **benchmark/** → Performance measurement and comparison utilities.
+* **tracking/** → Experiment artifact persistence and report management.
+* **config/** → Configuration-driven system behavior.
+* **data/** → Benchmark datasets and prompt collections.
+* **tests/** → Automated testing suite.
+* **docs/** → Architecture, benchmarks, and project documentation.
+* **artifacts/** → Runtime-generated benchmark reports and experiment outputs.
 
 ---
 
@@ -377,13 +408,16 @@ Test coverage includes the inference layer, benchmark engine, service layer, CLI
 ---
 
 ## Supported Models
+Parallax does not hardcode supported models.
+
+Available models are defined in `config/settings.yaml` and are loaded dynamically at runtime.
 
 Parallax currently ships with:
 
 - Qwen2.5-0.5B-Instruct
 - SmolLM2-360M-Instruct
 
-Additional Hugging Face causal language models can be added through configuration.
+Additional Hugging Face causal language models can be added or existing models can be changed through configuration.
 
 ---
 
