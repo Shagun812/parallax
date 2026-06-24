@@ -25,4 +25,7 @@ parallax.egg-info/
 .parallax
 
 #pytest cache
-.pytest_cache
+.pytest_cache/
+.coverage
+htmlcov/
+coverage.xml

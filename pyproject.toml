@@ -38,9 +38,10 @@ exclude = ["tests*", "data*", "artifacts*", "docs*"]
 requires = ["setuptools>=68.0"]
 build-backend="setuptools.build_meta"
 
-[dependency-groups]
+[project.optional-dependencies]
 dev = [
     "pytest>=8.0",
+    "pytest-cov>=6.0.0",
 ]
 
 
