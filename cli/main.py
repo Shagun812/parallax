@@ -117,23 +117,22 @@ def benchmark_run():
     metrics_table.add_column("Metric")
     metrics_table.add_column("Value")
 
-    rows=[
-        ("Total Prompts", str(metrics["total_prompts"])),
-        ("Total Runs", str(metrics["total_runs"])),
-        ("Mean Latency (ms)", str(metrics["mean_latency_ms"])),
-        ("P50 Latency (ms)", str(metrics["p50_latency_ms"])),
-        ("P95 Latency (ms)", str(metrics["p95_latency_ms"])),
-        ("P99 Latency (ms)", str(metrics["p99_latency_ms"])),
-        ("Max Latency (ms)", str(metrics["max_latency_ms"])),
-        ("Min Latency (ms)", str(metrics["min_latency_ms"])),
-        ("Mean Throughput", str(metrics["mean_tokens_per_sec"])), 
-        ("Avg Input Tokens", str(metrics["avg_input_tokens"])),
-        ("Avg Output Tokens", str(metrics["avg_output_tokens"])),
-        ("Total Output Tokens", str(metrics["total_output_tokens"]))       
-    ]
+    rows={
+        "mean_latency_ms": "Mean Latency (ms)",
+        "p50_latency_ms": "P50 Latency (ms)",
+        "p95_latency_ms": "P95 Latency (ms)",
+        "p99_latency_ms": "P99 Latency (ms)",
+        "max_latency_ms": "Max Latency (ms)",
+        "min_latency_ms": "Min Latency (ms)",
+        "mean_tokens_per_sec": "Mean Throughput",
+        "avg_input_tokens": "Avg Input Tokens",
+        "avg_output_tokens": "Avg Output Tokens",
+        "total_output_tokens": "Total Output Tokens"
+    }
 
-    for metric, value in rows:
-        metrics_table.add_row(metric, value)
+    for metric, display_name in rows.items():
+        if metric in metrics:
+            metrics_table.add_row(display_name, str(metrics[metric]))
     console.print(metrics_table)
 
     console.print(f"Benchmark saved: {artifact_path}")
@@ -184,23 +183,22 @@ def exp_show(report_name:str = typer.Option(...,"-f", "--file", help="Report fil
     table.add_column("Value")
 
 
-    rows=[
-        ("Total Prompts", str(metrics["total_prompts"])),
-        ("Total Runs", str(metrics["total_runs"])),
-        ("Mean Latency (ms)", str(metrics["mean_latency_ms"])),
-        ("P50 Latency (ms)", str(metrics["p50_latency_ms"])),
-        ("P95 Latency (ms)", str(metrics["p95_latency_ms"])),
-        ("P99 Latency (ms)", str(metrics["p99_latency_ms"])),
-        ("Max Latency (ms)", str(metrics["max_latency_ms"])),
-        ("Min Latency (ms)", str(metrics["min_latency_ms"])),
-        ("Mean Throughput", str(metrics["mean_tokens_per_sec"])), 
-        ("Avg Input Tokens", str(metrics["avg_input_tokens"])),
-        ("Avg Output Tokens", str(metrics["avg_output_tokens"])),
-        ("Total Output Tokens", str(metrics["total_output_tokens"]))       
-    ]
+    rows={
+        "mean_latency_ms": "Mean Latency (ms)",
+        "p50_latency_ms": "P50 Latency (ms)",
+        "p95_latency_ms": "P95 Latency (ms)",
+        "p99_latency_ms": "P99 Latency (ms)",
+        "max_latency_ms": "Max Latency (ms)",
+        "min_latency_ms": "Min Latency (ms)",
+        "mean_tokens_per_sec": "Mean Throughput",
+        "avg_input_tokens": "Avg Input Tokens",
+        "avg_output_tokens": "Avg Output Tokens",
+        "total_output_tokens": "Total Output Tokens"
+    }
 
-    for metric, value in rows:
-        table.add_row(metric, value)
+    for metric, display_name in rows.items():
+        if metric in metrics:
+            table.add_row(display_name, str(metrics[metric]))
     console.print(table)
 
 

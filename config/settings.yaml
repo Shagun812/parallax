@@ -25,7 +25,7 @@ benchmark:
   runs_per_model: 3
   warmup_runs: 1
   collect_latency: true
-  collect_memory: true
+  collect_memory: false
   collect_throughput: true
 
 quality:
