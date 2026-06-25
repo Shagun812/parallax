@@ -1,7 +1,24 @@
 # Parallax
+```text
+8888888b.                          888 888                  
+888   Y88b                         888 888                  
+888    888                         888 888                  
+888   d88P 8888b.  888d888 8888b.  888 888  8888b.  888  888
+8888888P"     "88b 888P"      "88b 888 888     "88b `Y8bd8P'
+888       .d888888 888    .d888888 888 888 .d888888   X88K  
+888       888  888 888    888  888 888 888 888  888 .d8""8b.
+888       "Y888888 888    "Y888888 888 888 "Y888888 888  888
+```
 
-### A Local LLM Benchmarking, Experimentation, and Serving Platform
+>A local platform for serving, benchmarking, and comparing large language models.
 
+![Python](https://img.shields.io/badge/Python-3.10+-darkblue?logo=python&logoColor=blue)
+![Transformers](https://img.shields.io/badge/🤗%20Transformers-4.45+-yellow)
+![PyTorch](https://img.shields.io/badge/PyTorch-2.4+-EE4C2C?logo=pytorch&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-green)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-009688?logo=fastapi&logoColor=white)
+![Architecture](https://img.shields.io/badge/Architecture-Layered-purple)
+![Typer](https://img.shields.io/badge/Typer-CLI-009688)
 ---
 
 ## Table of Contents
@@ -21,7 +38,6 @@
 - [Testing](#testing)
 - [Supported Models](#supported-models)
 - [V1 Scope & Limitations](#v1-scope--limitations)
-- [V2 Roadmap](#v2-roadmap)
 - [License](#license)
 
 ---
@@ -61,7 +77,7 @@ Benchmarking and experiment tracking are CLI-driven workflows. Results are persi
 
 **Text Generation**
 - Run inference via CLI or HTTP
-- Per-request metrics: generation latency, tokens per second (throughput) , input/output token counts
+- Per-request metrics: generation latency, throughput (tokens/sec) , input/output token counts
 
 **Benchmarking**
 - Execute structured benchmark runs against any configured model
@@ -91,10 +107,10 @@ Parallax follows a layered architecture that separates interfaces, business logi
 
 Key design principles:
 
-- Shared service layer across CLI and FastAPI, business logic is implemented once
+- Shared service layer across CLI and FastAPI: business logic is implemented once
 - Separated concerns - inference, benchmarking, and tracking are independent modules
-- Configuration-driven model management models and behavior defined in `config/settings.yaml`
-- Structured logging and artifact persistence in all runs are traceable and reproducible
+- Configuration-driven model management: models and behavior defined in `config/settings.yaml`
+- Structured logging and artifact persistence ensure that benchmark runs remain traceable.
 
 ![Architecture](docs/architecture.png)
 
@@ -111,8 +127,11 @@ git clone https://github.com/Shagun812/parallax.git
 cd parallax
 
 python -m venv .venv
-source .venv/bin/activate       # Linux / macOS / WSL
-# .venv\Scripts\activate        # Windows
+# Linux / macOS / WSL
+source .venv/bin/activate   
+
+# Windows
+.venv\Scripts\Activate.ps1   
 
 # For runtime dependencies
 pip install -e .
@@ -160,7 +179,7 @@ benchmark:
   runs_per_model: 3
   warmup_runs: 1
   collect_latency: true
-  collect_memory: true
+  collect_memory: false
   collect_throughput: true
 
 quality:
@@ -339,7 +358,6 @@ parallax/
 ├── docs/
 │   ├── architecture.md            # System architecture documentation
 │   ├── architecture.png           # Architecture diagram
-│   ├── benchmarks.md              # Benchmark methodology and results
 │   └── CLI.png                    # CLI screenshots and usage examples
 │
 ├── inference/
@@ -392,15 +410,13 @@ Benchmark runs are executed via the CLI and persisted as structured JSON artifac
 
 - Model name and configuration
 - Prompt count and runs per prompt
-- Generation latency include mean, p50, p95, p99, min and max latency
+- Generation latency: mean, p50, p95, p99, min and max latency
 - Mean tokens per second
 - Average input and output token counts
 
 **What is measured:** Generation latency covers the full `model.generate()` decode loop, all forward passes, KV cache operations, and sampling. A CUDA synchronization point is placed after generation and before the timer stop to ensure GPU execution is fully complete before measurement is taken.
 
 **What is not measured:** Time to first token (TTFT), tokenization time, and end-to-end request latency are not currently captured. These are planned for v2.
-
-For full benchmark results across models, methodology, and reproduction steps, see [`docs/benchmarks.md`](docs/benchmarks.md).
 
 ---
 
@@ -432,7 +448,7 @@ Parallax currently ships with:
 - Qwen2.5-0.5B-Instruct
 - SmolLM2-360M-Instruct
 
-Additional Hugging Face causal language models can be added or existing models can be changed through configuration.
+Additional Hugging Face causal language models can be added or existing ones can be replaced by updating config/settings.yaml.
 
 ---
 
@@ -447,17 +463,6 @@ Parallax v1 is intentionally scoped to local single-user experimentation.
 - Benchmarking and experiment tracking available via CLI only
 - Artifact storage is local filesystem only
 - Quality scoring is implemented in configuration but disabled pending v2 evaluation pipeline
-
----
-
-## V2 Roadmap
-
-| Area | Planned Work |
-|---|---|
-| Inference | Async serving, request queues |
-| Evaluation | Quality scoring pipeline, semantic similarity, coherence metrics |
-| Observability | Advanced monitoring, metrics dashboard |
-| Deployment | Docker containerization, simplified environment setup |
 
 ---
 

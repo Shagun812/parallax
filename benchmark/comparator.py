@@ -52,7 +52,7 @@ def comp_benchmarks(report_a: dict,report_b: dict)-> dict:
         comp[metric] = {
             "model_a": value_a,
             "model_b": value_b,
-            "difference": round(value_b-value_a,2), # difference = model_b- model_a
+            "difference": round(abs(value_b-value_a),2), # difference = model_b- model_a
             "better": better
         }
 
@@ -74,7 +74,7 @@ def comp_benchmarks(report_a: dict,report_b: dict)-> dict:
         comp[metric] = {
             "model_a": value_a,
             "model_b": value_b,
-            "difference": round(value_b-value_a,2), # difference = model_b- model_a
+            "difference": round(abs(value_b-value_a),2), # difference = model_b- model_a
             "better": better
         }
 
